@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的 Cloudflare 网站</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f0f4f8; }
+        h1 { color: #f6821f; } /* Cloudflare 橙色 */
+        p { color: #333; }
+        .card { background: white; padding: 20px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎉 恭喜！网站上线成功</h1>
+        <p>这是通过 Cloudflare Pages 托管的纯 HTML 网站。</p>
+        <p>无需服务器，全球加速，完全免费。</p>
+        <hr>
+        <small>当前时间：<span id="time"></span></small>
+    </div>
+    <script>
+        document.getElementById('time').innerText = new Date().toLocaleString();
+    </script>
+</body>
+</html>
