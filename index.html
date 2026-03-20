@@ -3,24 +3,377 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的 Cloudflare 网站</title>
+    <title>我的个人网站</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f0f4f8; }
-        h1 { color: #f6821f; } /* Cloudflare 橙色 */
-        p { color: #333; }
-        .card { background: white; padding: 20px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        /* =============== 全局重置与基础样式 =============== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --cf-orange: #f6821f;
+            --dark-gray: #333;
+            --light-gray: #f5f5f5;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background-color: var(--white);
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        section {
+            padding: 80px 0;
+        }
+        h1, h2, h3 {
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* =============== 导航栏 =============== */
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--cf-orange);
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li {
+            margin-left: 30px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--cf-orange);
+        }
+
+        /* =============== 英雄区域 =============== */
+        .hero {
+            background: linear-gradient(135deg, var(--light-gray) 0%, #e0e7ff 100%);
+            text-align: center;
+            padding: 120px 0;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--cf-orange);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--cf-orange);
+        }
+        .btn:hover {
+            background-color: transparent;
+            color: var(--cf-orange);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        /* =============== 关于我 =============== */
+        .about {
+            background-color: var(--white);
+        }
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        .about-image {
+            flex: 1;
+            text-align: center;
+        }
+        .about-image img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--light-gray);
+            box-shadow: var(--shadow);
+        }
+        .about-text {
+            flex: 1;
+        }
+        .about-text h2 {
+            font-size: 2.5rem;
+        }
+
+        /* =============== 特色功能 =============== */
+        .features {
+            background-color: var(--light-gray);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .feature-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--cf-orange);
+        }
+        .feature-card h3 {
+            font-size: 1.5rem;
+        }
+
+        /* =============== 作品集 =============== */
+        .portfolio {
+            background-color: var(--white);
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .gallery-item {
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .gallery-item img:hover {
+            transform: scale(1.05);
+        }
+
+        /* =============== 联系表单 =============== */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        .submit-btn {
+            background-color: var(--cf-orange);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background-color: #e0741a;
+            transform: translateY(-3px);
+        }
+
+        /* =============== 响应式设计 =============== */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-links li {
+                margin: 5px 10px;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .about-text {
+                margin-top: 30px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>🎉 恭喜！网站上线成功</h1>
-        <p>这是通过 Cloudflare Pages 托管的纯 HTML 网站。</p>
-        <p>无需服务器，全球加速，完全免费。</p>
-        <hr>
-        <small>当前时间：<span id="time"></span></small>
-    </div>
-    <script>
-        document.getElementById('time').innerText = new Date().toLocaleString();
-    </script>
+
+    <!-- =============== 导航栏 =============== -->
+    <nav>
+        <div class="container navbar">
+            <a href="#" class="logo">我的品牌</a>
+            <ul class="nav-links">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#about">关于</a></li>
+                <li><a href="#features">服务</a></li>
+                <li><a href="#portfolio">作品</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- =============== 英雄区域 =============== -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>欢迎来到我的世界</h1>
+            <p>我是设计师/开发者，致力于创造美丽而实用的数字体验。</p>
+            <a href="#contact" class="btn">立即联系</a>
+        </div>
+    </section>
+
+    <!-- =============== 关于我 =============== -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image">
+                    <!-- 替换为你自己的头像图片路径 -->
+                    <img src="your-profile-picture.jpg" alt="我的照片">
+                </div>
+                <div class="about-text">
+                    <h2>关于我</h2>
+                    <p>在这里写下你的个人简介。可以介绍你的专业背景、技能、兴趣爱好以及你的工作理念。让访客快速了解你是谁以及你能提供什么价值。</p>
+                    <p>保持内容简洁有力，突出你的核心优势和独特之处。一个好的个人简介能迅速建立信任感。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =============== 特色功能 =============== -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 style="text-align: center;">我的服务</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>UI/UX 设计</h3>
+                    <p>创造直观、美观且以用户为中心的界面，提升产品体验和转化率。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h3>前端开发</h3>
+                    <p>使用现代技术栈（HTML, CSS, JavaScript, React）将设计完美转化为可交互的网页。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>性能优化</h3>
+                    <p>确保网站加载速度极快，在各种设备上都能流畅运行，提升SEO排名。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =============== 作品集 =============== -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <h2 style="text-align: center;">我的作品</h2>
+            <div class="gallery-grid">
+                <!-- 替换为你自己的作品图片路径 -->
+                <div class="gallery-item"><img src="photo1.jpg" alt="作品 1"></div>
+                <div class="gallery-item"><img src="photo2.jpg" alt="作品 2"></div>
+                <div class="gallery-item"><img src="photo3.jpg" alt="作品 3"></div>
+                <div class="gallery-item"><img src="photo4.jpg" alt="作品 4"></div>
+                <div class="gallery-item"><img src="photo5.jpg" alt="作品 5"></div>
+                <div class="gallery-item"><img src="photo6.jpg" alt="作品 6"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =============== 联系表单 =============== -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 40px;">联系我</h2>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">留言</label>
+                    <textarea id="message" name="message" placeholder="请在此输入您的信息..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">发送消息</button>
+            </form>
+        </div>
+    </section>
+
 </body>
 </html>
